@@ -9,7 +9,7 @@
 </form>
 <?php
 header ( "Content-Type:text/html; charset=UTF-8" );
-//ini_set('display_errors', false);
+ini_set('display_errors', false);
 
 // process the xls file
 /**
@@ -63,7 +63,7 @@ function combineExcels($numOfRowsToSkip, $numOfRowsToRead)
 
 echo "<ul>";
 $dirPath = 'uploads/';
-echo $dirPath;
+//echo $dirPath;
 
 if (! ($handle = opendir ( $dirPath ))) {
 	die ( "不能打开文件夹！" );
@@ -91,7 +91,7 @@ while ( $file = readdir ( $handle ) ) {
 		 */
 		$objReader = PHPExcel_IOFactory::createReader ( $inputFileType );
 		
-		echo '<hr />';
+//		echo '<hr />';
 		
 		/**
 		 * Define how many rows we want for each "chunk" *
@@ -224,7 +224,7 @@ $resultWriter = PHPExcel_IOFactory::createWriter($resultPHPExcel, 'Excel5');
 $resultWriter->save('./result/result.xls');
 
 
-
+echo "<a href='./result/result.xls'>合并完成，点击下载<a>"; 
 
 //exit;
 }
