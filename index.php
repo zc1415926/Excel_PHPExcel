@@ -3,7 +3,8 @@
   	<input type="text" name="rowsOfHead" value="1" /><br>
   	<label>提取几行？</label><br>
   	<input type="text" name="rowsOfContent" value="1" /><br>
-  	
+  	<lable>最后一列的列号</lable><br>
+  	<input type="text" name="nameOfLastCol" value="BT" /><br>
   	<button type="submit">开始合并</button>
 </form>
 <?php
@@ -128,9 +129,9 @@ while ( $file = readdir ( $handle ) ) {
 			{
 				//print_r($i);
 				//print_r($sheetData [$i]);
-				echo "<br>!!!!<br>";
-				print_r($sheetData[$i]);
-				echo "<br>";
+				//echo "<br>!!!!<br>";
+				//print_r($sheetData[$i]);
+				//echo "<br>";
 				$resultArray[] = $sheetData [$i];
 			}
 		
@@ -140,10 +141,13 @@ while ( $file = readdir ( $handle ) ) {
 	}
 }
 //print_r($sheetData);
-closedir ( $handle );
-
 echo "</ul>";
 
+//关闭文件夹句柄
+closedir ( $handle );
+
+
+//释放变量，释放内存
 $objPHPExcel->disconnectWorksheets();
 unset($objPHPExcel);
 //print_r($resultArray);
@@ -166,10 +170,21 @@ $resultPHPExcel->setActiveSheetIndex(0);
 
 //set cell by loop
 $numOfRows = count($resultArray);
-echo $numOfRows."<br>";
-$numOfColumns = count($resultArray[0]);
-echo $numOfColumns."<br>";
-print_r($resultArray[0]);
+//echo "numOfRows: ".$numOfRows."<br>";
+
+$nameOfLastCol = $_POST["nameOfLastCol"];
+
+//echo $nameOfLastCol[0];
+//echo "<br>";
+//echo $nameOfLastCol[1];
+//echo "<br>";
+$numOfLastCol =  (ord($nameOfLastCol[0])-65+1)*26 + ord($nameOfLastCol[1])-65+1;
+//echo $numOfLastCol;
+//echo "!!<br>";
+
+$numOfColumns = $numOfLastCol;//count($resultArray[0]);
+//echo $numOfColumns."<br>";
+//print_r($resultArray[0]);
 $timesOfColBy26 = 0;
 
 //first param is column, begin with 0, second is row, begin with 1, 
@@ -184,13 +199,13 @@ for($row = 1; $row <= $numOfRows; $row++)
 		if(1<=$col && $col<=26)
 		{
 			$resultPHPExcel->getActiveSheet()->setCellValueExplicitByColumnAndRow($col-1, $row, $resultArray[$row-1][chr(65+$col-1)]);
-			echo chr(65+$col-1). "<br>";//上边是从1开始的，下边是从0开始的，所以到了下边就要减1
+			//echo chr(65+$col-1). "<br>";//上边是从1开始的，下边是从0开始的，所以到了下边就要减1
 		}
 		else //只能应对两位字母表示的列数
 		{
 	
 			$resultPHPExcel->getActiveSheet()->setCellValueExplicitByColumnAndRow($col-1, $row, $resultArray[$row-1][chr(65 + $timesOfColBy26-1).chr($col-1 - 26*$timesOfColBy26 + 65)]);
-			echo chr(65 + $timesOfColBy26-1).chr($col-1 - 26*$timesOfColBy26 + 65) . "<br>";//不减1就从B开始了,弄不清楚要不要减一了，试一试就知道了
+			//echo chr(65 + $timesOfColBy26-1).chr($col-1 - 26*$timesOfColBy26 + 65) . "<br>";//不减1就从B开始了,弄不清楚要不要减一了，试一试就知道了
 	
 			
 		}
