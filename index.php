@@ -139,7 +139,7 @@ while ( $file = readdir ( $handle ) ) {
 		$currNumOfFiles++;
 		$percentFinish = round($currNumOfFiles/$numOfFiles*100);
 		//echo $percentFinish;
-		writeLog($currNumOfFiles . " ". $numOfFiles ."======= " . $percentFinish );
+		writeLog($percentFinish);
 		//writeLog($percentFinish);
 	}
 	
@@ -217,7 +217,7 @@ for($row = 1; $row <= $numOfRows; $row++)
 	$currNumOfFiles++;
 	$percentFinish = round($currNumOfFiles/$numOfFiles*100);
 	//echo $percentFinish;
-	writeLog($currNumOfFiles . " ". $numOfFiles ."======= " . $percentFinish );
+	writeLog($percentFinish );
 }
 
 //echo '<br>AAAAAAAAAAAAAAA<br>';
@@ -242,8 +242,8 @@ echo "<a href='./result/result.xls'>合并完成，点击下载<a>";
 function writeLog($prarm)
 {
 	$file = "logs/log.log";
-	$content = date("Y-m-d H:i:s =>") .$prarm. "\n" ;
-	
-	$fileHandle = file_put_contents($file, $content, FILE_APPEND);
+	//$content = date("Y-m-d H:i:s =>") .$prarm. "\n" ;
+	$content = $prarm. "\n" ;
+	$fileHandle = file_put_contents($file, $content);//, FILE_APPEND);
 }
 ?>
