@@ -1,12 +1,3 @@
-<form id="params" action="index.php" method="post">
-  	<label>表头有几行？</label><br>
-  	<input type="text" name="rowsOfHead" value="1" /><br>
-  	<label>提取几行？</label><br>
-  	<input type="text" name="rowsOfContent" value="1" /><br>
-  	<lable>最后一列的列号</lable><br>
-  	<input type="text" name="nameOfLastCol" value="BT" /><br>
-  	<button type="submit">开始合并</button>
-</form>
 <?php
 header ( "Content-Type:text/html; charset=UTF-8" );
 ini_set('display_errors', false);

@@ -16,11 +16,12 @@ body {
 <body>
 	<h1>Uploadify Demo</h1>
 	
+	
 	<form>
 		<div id="queue"></div>
 		<input id="file_upload" name="file_upload" type="file" multiple="true">
 	</form>
- <form action="../index.php">
+ <form action="../process.php">
 		<button id="upload_finish" type="submit" disabled="disabled">开始处理</button>
 	</form>
  	
