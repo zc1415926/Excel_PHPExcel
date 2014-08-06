@@ -1,6 +1,6 @@
 <?php
 header ( "Content-Type:text/html; charset=UTF-8" );
-ini_set('display_errors', false);
+//ini_set('display_errors', false);
 
 // process the xls file
 /**
@@ -59,6 +59,12 @@ $dirPath = 'uploads/';
 if (! ($handle = opendir ( $dirPath ))) {
 	die ( "不能打开文件夹！" );
 }
+
+//用来计算，表格合成完成了百分之几
+$numOfFiles = (count(scandir($dirPath)) - 2)*2;//乘2是又要读，又要写
+$currNumOfFiles = 0;
+$percentFinish = 0;
+
 
 while ( $file = readdir ( $handle ) ) {
 	if ($file != "." && $file != "..") {
@@ -129,7 +135,14 @@ while ( $file = readdir ( $handle ) ) {
 			
 		
 		}
+		//读文件时，小时.和..都算一个的，要把它们排除掉
+		$currNumOfFiles++;
+		$percentFinish = round($currNumOfFiles/$numOfFiles*100);
+		//echo $percentFinish;
+		writeLog($currNumOfFiles . " ". $numOfFiles ."======= " . $percentFinish );
+		//writeLog($percentFinish);
 	}
+	
 }
 //print_r($sheetData);
 echo "</ul>";
@@ -201,6 +214,10 @@ for($row = 1; $row <= $numOfRows; $row++)
 			
 		}
 	}
+	$currNumOfFiles++;
+	$percentFinish = round($currNumOfFiles/$numOfFiles*100);
+	//echo $percentFinish;
+	writeLog($currNumOfFiles . " ". $numOfFiles ."======= " . $percentFinish );
 }
 
 //echo '<br>AAAAAAAAAAAAAAA<br>';
@@ -218,5 +235,15 @@ $resultWriter->save('./result/result.xls');
 echo "<a href='./result/result.xls'>合并完成，点击下载<a>"; 
 
 //exit;
+}
+
+
+
+function writeLog($prarm)
+{
+	$file = "logs/log.log";
+	$content = date("Y-m-d H:i:s =>") .$prarm. "\n" ;
+	
+	$fileHandle = file_put_contents($file, $content, FILE_APPEND);
 }
 ?>
