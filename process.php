@@ -7,9 +7,11 @@
   	<input class="rowsOfContent" type="text" name="rowsOfContent" value="1" /><br>
   	<lable>最后一列的列号</lable><br>
   	<input class="nameOfLastCol" type="text" name="nameOfLastCol" value="BT" /><br>
-  	<button type="submit">开始合并</button>
+  	<!--  <button type="submit">开始合并</button>-->
+  	<button class="combineExcel" type="button">开始合并</button>
 </form>
 <p class="interval"></p>
+<p class="resultP"></p>
 <script type="text/javascript">
 /*$.ajax({ 
 	"type":"POST", 
@@ -21,9 +23,44 @@
 	.html(data); 
 	} 
 	});*/
-
+var timer;
 $(document).ready(function(){
-	  $("button").click(function(){
+
+	$("button.combineExcel").click(function(){
+		var rowsOfHead = $("input.rowsOfHead").val();
+		var rowsOfContent = $("input.rowsOfContent").val();
+		var nameOfLastCol = $("input.nameOfLastCol").val();
+
+		$.ajax({
+			"type":"POST", 
+			"url":"clearLog.php", 
+			"data":{
+
+			},
+			"success":function(data){ 
+				//alert(data);
+				//$("p.resultP").html(data);
+			} 
+		});
+		
+		$.ajax({
+			"type":"POST", 
+			"url":"index.php", 
+			"data":{
+				rowsOfHead : rowsOfHead,
+				rowsOfContent : rowsOfContent,
+				nameOfLastCol : nameOfLastCol,
+			},
+			"success":function(data){ 
+				//alert(data);
+				$("p.resultP").html(data);
+			} 
+		});
+
+		timer = setInterval("$.getProgress()",500);
+	});
+	
+	  $("button.postBtn").click(function(){
 		  var rowsOfHead = $("input.rowsOfHead").val();
 		  var rowsOfContent = $("input.rowsOfContent").val();
 		  var nameOfLastCol = $("input.nameOfLastCol").val();
@@ -36,7 +73,7 @@ $(document).ready(function(){
 					rowsOfContent : rowsOfContent,
 					nameOfLastCol : nameOfLastCol,
 
-	
+
 					    },
 				"success":function(data){ 
 				//$("#bar") 
@@ -47,19 +84,38 @@ $(document).ready(function(){
 				} 
 				});
 	  });
-
+	  
 	  $.extend({
 		  show:function(){
 			  $("p").append("3 seconds out.<br>");
+		  },
+		  getProgress:function(){
+			  $.ajax({ 
+					"type":"POST", 
+					"url":"getLog.php", 
+					"data":{
+					//	rowsOfHead : rowsOfHead,
+					//	rowsOfContent : rowsOfContent,
+					//	nameOfLastCol : nameOfLastCol,
+
+		
+					},
+					"success":function(data){ 
+						$("p.interval").append(data + "<br>");
+						if(data == 100)
+						{
+							clearInterval(timer);
+						}
+						//alert(data);
+					} 
+					});
+			  
 		  }
 		});
-		setInterval("$.show()",3000);
+		//setInterval("$.show()",3000);
 
 
 
 	});
 </script>
-<button>向页面发送 HTTP POST 请求，并获得返回的结果</button>
-
-<?php
-?>
+<button class="postBtn">向页面发送 HTTP POST 请求，并获得返回的结果</button>

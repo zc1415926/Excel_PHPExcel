@@ -1,8 +1,9 @@
 <?php
 header ( "Content-Type:text/html; charset=UTF-8" );
-//ini_set('display_errors', false);
+ini_set('display_errors', false);
 
 // process the xls file
+
 /**
  * Include path *
  */
@@ -41,8 +42,9 @@ if(isset($_POST["rowsOfHead"]) && isset($_POST["rowsOfContent"]))
 	$resultArray = array();
 	$numOfRowsToSkip=$_POST["rowsOfHead"];// = 1;
 	$numOfRowsToRead=$_POST["rowsOfContent"];// = 2;
-	
+	//echo "haha";
 	combineExcels($numOfRowsToSkip, $numOfRowsToRead);
+	
 }
 
 
@@ -52,7 +54,7 @@ if(isset($_POST["rowsOfHead"]) && isset($_POST["rowsOfContent"]))
 function combineExcels($numOfRowsToSkip, $numOfRowsToRead)
 {
 
-echo "<ul>";
+//echo "<ul>";
 $dirPath = 'uploads/';
 //echo $dirPath;
 
@@ -68,7 +70,7 @@ $percentFinish = 0;
 
 while ( $file = readdir ( $handle ) ) {
 	if ($file != "." && $file != "..") {
-		echo "<li>$file</li>";
+		//echo "<li>$file</li>";
 		
 		$inputFileType = 'Excel5';
 		// $inputFileType = 'Excel2007';
@@ -145,7 +147,7 @@ while ( $file = readdir ( $handle ) ) {
 	
 }
 //print_r($sheetData);
-echo "</ul>";
+//echo "</ul>";
 
 //关闭文件夹句柄
 closedir ( $handle );
