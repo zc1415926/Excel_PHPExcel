@@ -7,42 +7,33 @@
   	<input class="rowsOfContent" type="text" name="rowsOfContent" value="1" /><br>
   	<lable>最后一列的列号</lable><br>
   	<input class="nameOfLastCol" type="text" name="nameOfLastCol" value="BT" /><br>
-  	<!--  <button type="submit">开始合并</button>-->
+  	<!-- 不使用传统的type="submit"将表单提交给一个php,而是使用一个普通type="button"调用Ajax -->
   	<button class="combineExcel" type="button">开始合并</button>
 </form>
 <p class="interval"></p>
 <p class="resultP"></p>
+
 <script type="text/javascript">
-/*$.ajax({ 
-	"type":"POST", 
-	"url":"ajax.php", 
-	"data":"var1=val1&var2=val2", 
-	"success":function(data){ 
-	$("#bar") 
-	.css("background","yellow") 
-	.html(data); 
-	} 
-	});*/
+
 var timer;
 $(document).ready(function(){
-
+	
 	$("button.combineExcel").click(function(){
 		var rowsOfHead = $("input.rowsOfHead").val();
 		var rowsOfContent = $("input.rowsOfContent").val();
 		var nameOfLastCol = $("input.nameOfLastCol").val();
-
+		
+		//点击开始合并时，首先要把进度归0
 		$.ajax({
 			"type":"POST", 
 			"url":"clearLog.php", 
 			"data":{
-
 			},
 			"success":function(data){ 
-				//alert(data);
-				//$("p.resultP").html(data);
 			} 
 		});
-		
+
+		//把表格信息传递给index.php并输出结果
 		$.ajax({
 			"type":"POST", 
 			"url":"index.php", 
@@ -52,70 +43,30 @@ $(document).ready(function(){
 				nameOfLastCol : nameOfLastCol,
 			},
 			"success":function(data){ 
-				//alert(data);
 				$("p.resultP").html(data);
 			} 
 		});
-
+		//启动定时器，获取处理进度
 		timer = setInterval("$.getProgress()",500);
 	});
 	
-	  $("button.postBtn").click(function(){
-		  var rowsOfHead = $("input.rowsOfHead").val();
-		  var rowsOfContent = $("input.rowsOfContent").val();
-		  var nameOfLastCol = $("input.nameOfLastCol").val();
-
-		  $.ajax({ 
+	$.extend({
+		//定时器调用的函数，调用getLog.php获取进度并输出，当进度为100时清除定时器
+		getProgress:function(){
+			$.ajax({ 
 				"type":"POST", 
-				"url":"http://ajaxphp.bliand.com/post.php", 
+				"url":"getLog.php", 
 				"data":{
-					rowsOfHead : rowsOfHead,
-					rowsOfContent : rowsOfContent,
-					nameOfLastCol : nameOfLastCol,
-
-
-					    },
+				},
 				"success":function(data){ 
-				//$("#bar") 
-				//.css("background","yellow") 
-				//.html(data); 
-					//$("p.post").text(data);
-					alert(data);
+					$("p.interval").append(data + "<br>");
+					if(data == 100)
+					{
+						clearInterval(timer);
+					}
 				} 
-				});
-	  });
-	  
-	  $.extend({
-		  show:function(){
-			  $("p").append("3 seconds out.<br>");
-		  },
-		  getProgress:function(){
-			  $.ajax({ 
-					"type":"POST", 
-					"url":"getLog.php", 
-					"data":{
-					//	rowsOfHead : rowsOfHead,
-					//	rowsOfContent : rowsOfContent,
-					//	nameOfLastCol : nameOfLastCol,
-
-		
-					},
-					"success":function(data){ 
-						$("p.interval").append(data + "<br>");
-						if(data == 100)
-						{
-							clearInterval(timer);
-						}
-						//alert(data);
-					} 
-					});
-			  
-		  }
-		});
-		//setInterval("$.show()",3000);
-
-
-
+			});
+		}
 	});
+});
 </script>
-<button class="postBtn">向页面发送 HTTP POST 请求，并获得返回的结果</button>
