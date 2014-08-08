@@ -1,6 +1,6 @@
 <?php
 header ( "Content-Type:text/html; charset=UTF-8" );
-ini_set ( 'display_errors', false );
+//ini_set ( 'display_errors', false );
 
 // process the xls file
 
@@ -63,9 +63,10 @@ function combineExcels($numOfRowsToSkip, $numOfRowsToRead)
 		die ( "不能打开文件夹！" );
 	}
 	
+	
 	// 用来计算，表格合成完成了百分之几
 	//表格内文件总数，*2是为了读取完成时，进度只完成一半，写入完成时，进度完成另一半
-	$numOfFiles = (count ( scandir ( $dirPath ) ) - 2)*7;
+	$numOfFiles = (count ( scandir ( $dirPath ) ) - 2)+1;
 	$currNumOfFiles = 0;
 	$percentFinish = 0;
 	
@@ -117,13 +118,21 @@ function combineExcels($numOfRowsToSkip, $numOfRowsToRead)
 					$resultArray [] = $sheetData [$i];
 				}
 			}
+			
+			
 			// 读文件时“，”.和“..”都算一个文件，要注意把它们排除掉（用上一层的if语句）
-			$currNumOfFiles +=(1 *6);
+			$currNumOfFiles++;// +=(1 *6);
+			
 			$percentFinish = round ( $currNumOfFiles / $numOfFiles * 100 );
 			writeLog ( $percentFinish );
+			//echo print_r(count($sheetData)."<br>");
+			unlink($inputFileName);
 		}
 	}
 	
+
+	
+
 	// 关闭文件夹句柄
 	closedir ( $handle );
 	
@@ -140,17 +149,30 @@ function combineExcels($numOfRowsToSkip, $numOfRowsToRead)
 	// !!!yo an array begin from 0
 	// set cell by loop
 	$numOfRows = count ( $resultArray );
+	$nameOfLastCol = array();
+	$nameOfLastCol = strtoupper($_POST ["nameOfLastCol"]);
 	
-	$nameOfLastCol = $_POST ["nameOfLastCol"];
+	if(strlen($nameOfLastCol)>1)
+	{
+		$numOfLastCol = (ord ( $nameOfLastCol [0] ) - 65 + 1) * 26 + ord ( $nameOfLastCol [1] ) - 65 + 1;
+		//echo '$numOfLastCol';
+		//echo $numOfLastCol;
+	}
+	else 
+	{ 
+		
+		$numOfLastCol = ord ( $nameOfLastCol [0] ) - 65 + 1;
+	}
 	
-	$numOfLastCol = (ord ( $nameOfLastCol [0] ) - 65 + 1) * 26 + ord ( $nameOfLastCol [1] ) - 65 + 1;
-
 	$numOfColumns = $numOfLastCol; 
 	$timesOfColBy26 = 0;
+	//echo $currNumOfFiles ."\n";
+	//echo $numOfFiles ."\n";
 	
 	// first param is column, begin with 0, second is row, begin with 1,
 	for($row = 1; $row <= $numOfRows; $row ++)
 	{
+		
 		for($col = 1; $col <= $numOfColumns; $col ++)
 		{
 			// echo (int)($col / (26 - 1)) . "<br>";//因为从0开始的, 得数为小数
@@ -168,18 +190,22 @@ function combineExcels($numOfRowsToSkip, $numOfRowsToRead)
 				// echo chr(65 + $timesOfColBy26-1).chr($col-1 - 26*$timesOfColBy26 + 65) . "<br>";//不减1就从B开始了,弄不清楚要不要减一了，试一试就知道了
 			}
 		}
-		$currNumOfFiles ++;
+		//写到第几行，就占最后一份的几分之一，和前边读文件的算法不太一样
+		$currNumOfFiles += 1/$numOfRows;
+		//echo $currNumOfFiles ."\n";
 		$percentFinish = round ( $currNumOfFiles / $numOfFiles * 100 );
-		
+		//echo $percentFinish ."\n";
 		writeLog ( $percentFinish );
+		
 	}
-	
+	//print_r($resultPHPExcel->getActiveSheet ()->toArray ( null, true, true, true ));
 	$resultWriter = PHPExcel_IOFactory::createWriter ( $resultPHPExcel, 'Excel5' );
 	$resultWriter->save ( './result/result.xls' );
 	
 	//echo "<a class='btn btn-large btn-danger' href='./result/result.xls'>合并完成，点击下载<a>";
 
 }
+
 function writeLog($prarm)
 {
 	$file = "logs/log.log";

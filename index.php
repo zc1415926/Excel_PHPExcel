@@ -144,7 +144,7 @@ line-height: 25px;
 		<!-- Jumbotron -->
 		<div class="jumbotron">
 			<h1>Excel合并云</h1>
-			删除已上传文件
+			表单的检查，提示、帮助
 			<p class="lead">无需复制粘贴，无需安装软件，无需费心竭力，“Excel合并云”帮你轻松搞定！</p>
 			<!--<a class="btn btn-large btn-success " href="#">上传文件，开始合并</a>-->
 
@@ -167,7 +167,7 @@ line-height: 25px;
 							type="button" style="display: none;margin-bottom: 0.7em"" >填写完毕，开始合并</button>
 						
 					<!-- <p class="interval"></p>
-					<p class="resultP"></p> -->
+					<p class="resultP"></p>-->
 					<a id="downloadBtn" class="btn btn-large btn-danger"
 						href="./result/result.xls" style="display: none" margin-bottom: 0.7em">合并完成，点击下载</a>
 
@@ -261,7 +261,7 @@ line-height: 25px;
 			'fileTypeExts':'*.xls;',
 			'buttonText' : '上传文件，开始合并',
 			//'buttonImage' : 'browse-btn.png'
-			'onUploadSuccess' : function(file, data, response) {
+			'onQueueComplete' : function(file, data, response) {
 				$("#upload_finish").slideDown("slow");
 			},
 		});
@@ -293,7 +293,8 @@ line-height: 25px;
 				"data":{
 				},
 				"success":function(data){ 
-				} 
+					//alert(data);
+				},
 			});
 
 			//把表格信息传递给processCombination.php并输出结果
@@ -309,7 +310,14 @@ line-height: 25px;
 					//$("p.resultP").html(data);
 					$("#combineExcel").removeAttr("disabled");
 					$("#combineExcel").text("填写完毕，开始合并");
-				} 
+
+					
+						//alert(data);
+				
+				},
+				"complete":function(data){
+					//alert(data);
+				}
 			});
 			//启动定时器，获取处理进度
 			timer = setInterval("$.getProgress()",500);
@@ -329,7 +337,7 @@ line-height: 25px;
 						//$("p.interval").append(p + "<br>");
 						$("#combineProgressionBar").css("width",(Number(data) + "%"));
 					
-						if(data == 100)
+						if(data >= 100)
 						{
 							//$("p.interval").html("<a class='btn btn-large btn-danger' href='./result/result.xls'>合并完成，点击下载<a>");
 							$("#downloadBtn").slideDown("slow");
