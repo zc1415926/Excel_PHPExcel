@@ -7,7 +7,8 @@
   	<input class="rowsOfContent" type="text" name="rowsOfContent" value="1" /><br>
   	<lable>最后一列的列号</lable><br>
   	<input class="nameOfLastCol" type="text" name="nameOfLastCol" value="BT" /><br>
-  	<!-- 不使用传统的type="submit"将表单提交给一个php,而是使用一个普通type="button"调用Ajax -->
+  	<!-- 不使用传统的type="submit"将表单提交给一个php,而是使用一个普通type="button"调用Ajax 
+  	TODO: 开始合并后，下边的按钮要改为不可用状态，或“正在。。”-->
   	<button class="combineExcel" type="button">开始合并</button>
 </form>
 <p class="interval"></p>
@@ -33,10 +34,10 @@ $(document).ready(function(){
 			} 
 		});
 
-		//把表格信息传递给index.php并输出结果
+		//把表格信息传递给processCombination.php并输出结果
 		$.ajax({
 			"type":"POST", 
-			"url":"index.php", 
+			"url":"processCombination.php", 
 			"data":{
 				rowsOfHead : rowsOfHead,
 				rowsOfContent : rowsOfContent,

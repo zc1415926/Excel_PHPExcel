@@ -16,7 +16,7 @@ body {
 <body>
 	<h1>Uploadify Demo</h1>
 	
-	
+	<container>
 	<form>
 		<div id="queue"></div>
 		<input id="file_upload" name="file_upload" type="file" multiple="true">
@@ -24,6 +24,7 @@ body {
  <form action="../process.php">
 		<button id="upload_finish" type="submit" disabled="disabled">开始处理</button>
 	</form>
+	</container>
  	
 	<script type="text/javascript">
 	//var submitButton =
@@ -50,6 +51,9 @@ body {
 				},
 			});
 		});
+
+		
+		
 	</script>
 
 </body>
