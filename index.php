@@ -27,7 +27,7 @@ body {
 
 /* Main marketing message and sign up button */
 .jumbotron {
-	margin: 80px 0;
+	margin: 80px 0 0 0;
 	/*text-align: center;*/
 }
 
@@ -94,6 +94,10 @@ body {
 p {
 
 line-height: 25px;
+}
+
+#combineProgress {
+margin-top: 15px;
 }
 </style>
 
@@ -191,7 +195,7 @@ line-height: 25px;
 				<div class="span4"></div>
 
 			</div>
-			<br>
+			
 			<div id="combineProgress" class="progress" style="display: none">
 			
 				<div id="combineProgressionBar" class="bar" style="width: 0%;"></div>
