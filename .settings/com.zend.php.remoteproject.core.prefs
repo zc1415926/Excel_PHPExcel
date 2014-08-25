@@ -1,7 +1,7 @@
 LaunchURL=http\://server/folder
 Save\ Mode=ON_SAVE
 SelectedHostGUID=2470c7a9-b26b-4e77-ab3c-79c32c0f4e09
-UploadFolder=/
+UploadFolder=/www/excel
 eclipse.preferences.version=1
 exclusionPatterns=
 inclusionPatterns=

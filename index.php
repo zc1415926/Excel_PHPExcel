@@ -99,6 +99,32 @@ line-height: 25px;
 #combineProgress {
 margin-top: 15px;
 }
+
+#params {
+	padding: 20px 0px 20px 20px;
+	margin: 0 0 0 -20px;
+	width: initial;
+	border: 1px solid #ccc;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	
+	
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	-webkit-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
+	box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
+	-webkit-background-clip: padding-box;
+	-moz-background-clip: padding;
+	background-clip: padding-box;
+	
+
+
+}
+
+/*#params>label {
+padding-right: 0px;
+width: 150px;
+margin-right: -100px;*/
 </style>
 
 
@@ -148,7 +174,7 @@ margin-top: 15px;
 		<!-- Jumbotron -->
 		<div class="jumbotron">
 			<h1>Excel合并云</h1>
-			表单的检查，提示、帮助
+			<!--TODO:  表单的检查，提示、帮助-->
 			<p class="lead">无需复制粘贴，无需安装软件，无需费心竭力，“Excel合并云”帮你轻松搞定！</p>
 			<!--<a class="btn btn-large btn-success " href="#">上传文件，开始合并</a>-->
 
@@ -179,7 +205,7 @@ margin-top: 15px;
 						
 						
 				</div>
-				<div class="span4">
+				<div class="span4 params">
 					<form id="params" action="index.php" method="post"
 						style="display: none">
 						<label>表头有几行？</label> <input class="rowsOfHead" type="text"
@@ -248,7 +274,9 @@ margin-top: 15px;
 
 
 	
-	<?php $timestamp = time();?>
+	<?php 
+	//定时检查记录Excel处理进度log文件的定时器
+	$timestamp = time();?>
 	$(function() {
 		$('#file_upload').uploadify({
 			'formData'     : {
@@ -266,6 +294,7 @@ margin-top: 15px;
 			'buttonText' : '上传文件，开始合并',
 			//'buttonImage' : 'browse-btn.png'
 			'onQueueComplete' : function(file, data, response) {
+				//显示按钮“上传完成，填写参数”
 				$("#upload_finish").slideDown("slow");
 			},
 		});
@@ -273,7 +302,13 @@ margin-top: 15px;
 
 	var timer;
 	$(document).ready(function(){
-
+		
+	/*	$("#upload_finish").click(function(){
+			$("#params").slideUp("slow");
+			$("#combineExcel").slideUp("slow");
+			$("#combineProgress").slideUp("slow");
+		});*/
+		
 		$("#upload_finish").click(function(){
 			$("#params").slideDown("slow");
 			$("#combineExcel").slideDown("slow");
@@ -345,11 +380,19 @@ margin-top: 15px;
 						{
 							//$("p.interval").html("<a class='btn btn-large btn-danger' href='./result/result.xls'>合并完成，点击下载<a>");
 							$("#downloadBtn").slideDown("slow");
+							
 							clearInterval(timer);
 						}
 					} 
 				});
 			}
+		});
+
+		$("#downloadBtn").click(function(){
+			$("#params").slideUp("slow");
+			$("#upload_finish").slideUp("slow");
+			$("#combineExcel").slideUp("slow");
+			$("#combineProgress").slideUp("slow");
 		});
 	});
 	</script>
