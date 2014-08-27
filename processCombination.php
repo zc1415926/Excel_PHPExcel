@@ -79,33 +79,19 @@ function combineExcels($numOfRowsToSkip, $numOfRowsToRead)
 			$inputFileType = 'Excel5';
 			$inputFileName = './uploads/' . $file; 
 			                                       
-			/**
-			 * Create a new Reader of the type defined in $inputFileType *
-			 */
+
 			$objReader = PHPExcel_IOFactory::createReader ( $inputFileType );
 
-			/**
-			 * Define how many rows we want for each "chunk" *
-			 */
-			$chunkSize = 20;
+
+			/*$chunkSize = 20;
 			
-			/**
-			 * Loop to read our worksheet in "chunk size" blocks *
-			 */
+
 			for($startRow = 2; $startRow <= 3; $startRow += $chunkSize)
 			{
-				// echo 'Loading WorkSheet using configurable filter for headings row 1 and for rows ', $startRow, ' to ', ($startRow + $chunkSize - 1), '<br />';
-				/**
-				 * Create a new Instance of our Read Filter, passing in the limits on which rows we want to read *
-				 */
-				$chunkFilter = new chunkReadFilter ( $startRow, $chunkSize );
-				/**
-				 * Tell the Reader that we want to use the new Read Filter that we've just Instantiated *
-				 */
+
+
 				$objReader->setReadFilter ( $chunkFilter );
-				/**
-				 * Load only the rows that match our filter from $inputFileName to a PHPExcel Object *
-				 */
+
 				$objPHPExcel = $objReader->load ( $inputFileName );
 				
 				// Do some processing here
@@ -117,8 +103,20 @@ function combineExcels($numOfRowsToSkip, $numOfRowsToRead)
 				{
 					$resultArray [] = $sheetData [$i];
 				}
+			}*/
+			
+			$objReader->setReadDataOnly(true);
+			$objPHPExcel = $objReader->load($inputFileName);
+			//一个xls文件读取完成，数据放入$sheetData中，使用var_dump ($sheetData);或print_r ($sheetData [2]);来查看
+			$sheetData = $objPHPExcel->getActiveSheet ()->toArray ( null, true, true, true );
+			
+			//$sheetData中有很多无用的数据，只选取几行需要的，存入$resultArray中
+			for($i = 1 + $numOfRowsToSkip; $i <= $numOfRowsToRead + $numOfRowsToSkip; $i ++)
+			{
+			$resultArray [] = $sheetData [$i];
 			}
 			
+			//var_dump($resultArray);
 			
 			// 读文件时“，”.和“..”都算一个文件，要注意把它们排除掉（用上一层的if语句）
 			$currNumOfFiles++;// +=(1 *6);
