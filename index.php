@@ -293,6 +293,10 @@ margin-right: -100px;*/
 			'fileTypeExts':'*.xls;',
 			'buttonText' : '上传文件，开始合并',
 			//'buttonImage' : 'browse-btn.png'
+			'onUploadStart' : function(file) {
+				//隐藏按钮“合并完成，点击下载”
+				$("#downloadBtn").slideUp("slow");
+	        },
 			'onQueueComplete' : function(file, data, response) {
 				//显示按钮“上传完成，填写参数”
 				$("#upload_finish").slideDown("slow");
@@ -393,6 +397,8 @@ margin-right: -100px;*/
 			$("#upload_finish").slideUp("slow");
 			$("#combineExcel").slideUp("slow");
 			$("#combineProgress").slideUp("slow");
+			//当点击"合并完成，点击下载"按钮后，合成进度条归零
+			$("#combineProgressionBar").css("width", 0);
 		});
 	});
 	</script>
