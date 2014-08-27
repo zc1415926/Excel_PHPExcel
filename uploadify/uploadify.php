@@ -14,11 +14,12 @@ if (!empty($_FILES) && $_POST['token'] == $verifyToken) {
 	$tempFile = $_FILES['Filedata']['tmp_name'];
 	$targetPath = $_SERVER['DOCUMENT_ROOT'] . $targetFolder;
 	
-	echo $targetPath;
-	$targetFile = rtrim($targetPath,'/') . '/' . $_FILES['Filedata']['name'];
+	//在上传文件的主文件名后追加精确到微秒的Unix时间戳，防止上传的文件重名而发生的先上传的文件被替换掉的情况
+	list($usec, $sec) = explode(" ", microtime());
+	$targetFile = rtrim($targetPath,'/') . '/' . str_replace('.xls', '', $_FILES['Filedata']['name']) . $sec . substr ($usec,2) . '.xls';
 	
 	// Validate the file type
-	$fileTypes = array('xls','xlsx'); // File extensions
+	$fileTypes = array('xls',''); // File extensions
 	$fileParts = pathinfo($_FILES['Filedata']['name']);
 	
 	if (in_array($fileParts['extension'],$fileTypes)) {
