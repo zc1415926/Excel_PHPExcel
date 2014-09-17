@@ -113,7 +113,9 @@ function combineExcels($numOfRowsToSkip, $numOfRowsToRead)
 			}
 			catch (PHPExcel_Reader_Exception $e)
 			{
-			    die('Error loading file: '.$e->getMessage());
+			    //die('Error loading file: '.$e->getMessage());
+			    echo 'Error loading file: '.$e->getMessage();
+			    unlink($inputFileName);
 			}
 			
 			

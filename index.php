@@ -363,7 +363,7 @@ margin-right: -100px;*/
 							//alert(dataStr.substring(43, 67));
 							//alert(dataStr.length);
 							//alert(dataStr.length-1);
-							alert("文件损坏：\n" + dataStr.split(" ")[5].substr(10));
+							alert("文件损坏：\n" + dataStr.split(" ")[5].substr(10) + "\n该文件已经从服务器删除！");
 						}
 						
 				
