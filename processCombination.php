@@ -70,6 +70,28 @@ function combineExcels($numOfRowsToSkip, $numOfRowsToRead)
 	$currNumOfFiles = 0;
 	$percentFinish = 0;
 	
+	//63M memory
+	//$cacheMethod = PHPExcel_CachedObjectStorageFactory::cache_in_memory_gzip;
+	//$cacheSettings = array();
+	//PHPExcel_Settings::setCacheStorageMethod($cacheMethod,$cacheSettings);
+	
+	//60M memory
+	$cacheMethod = PHPExcel_CachedObjectStorageFactory:: cache_to_discISAM;
+	$cacheSettings = array(
+			'dir' => '/home/zc1415926/private/cache'
+	);
+	PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
+	
+	
+	//74M memory
+	//$cacheMethod = PHPExcel_CachedObjectStorageFactory:: cache_to_phpTemp;
+	//$cacheSettings = array(
+	//		'memoryCacheSize' => '64MB'
+	//);
+	//PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
+	
+	
+	
 	//当文件夹内还有文件时
 	while ( $file = readdir ( $handle ) )
 	{
@@ -109,6 +131,7 @@ function combineExcels($numOfRowsToSkip, $numOfRowsToRead)
 			
 			try 
 			{
+				writeProgressLog($inputFileName);
 			    $objPHPExcel = $objReader->load($inputFileName);
 			    
 			    
@@ -123,8 +146,12 @@ function combineExcels($numOfRowsToSkip, $numOfRowsToRead)
 			    }
 			    	
 			    //var_dump($resultArray);
-			    	
-
+			    writeProgressLog(memory_get_usage());
+			    writeProgressLog('set null');
+			    $objReader = null;
+				$sheetData = null;
+			
+				writeProgressLog(memory_get_usage());
 			    //echo print_r(count($sheetData)."<br>");
 			    unlink($inputFileName);
 			}
@@ -141,10 +168,11 @@ function combineExcels($numOfRowsToSkip, $numOfRowsToRead)
 			$percentFinish = round ( $currNumOfFiles / $numOfFiles * 100 );
 			writeLog ( $percentFinish );
 			
+		
 			
 			
-			
-
+			writeProgressLog($percentFinish);
+			//writeProgressLog(memory_get_usage() . "\n");
 		}
 	}
 	
@@ -188,6 +216,7 @@ function combineExcels($numOfRowsToSkip, $numOfRowsToRead)
 	//echo $numOfFiles ."\n";
 	
 	// first param is column, begin with 0, second is row, begin with 1,
+
 	for($row = 1; $row <= $numOfRows; $row ++)
 	{
 		
@@ -230,5 +259,13 @@ function writeLog($prarm)
 	// $content = date("Y-m-d H:i:s =>") .$prarm. "\n" ;
 	$content = $prarm . "\n";
 	$fileHandle = file_put_contents ( $file, $content ); // , FILE_APPEND);
+}
+function writeProgressLog($prarm)
+{
+	$file = "logs/ProgressLog.log";
+	// $content = date("Y-m-d H:i:s =>") .$prarm. "\n" ;
+	$content = $prarm . "\n";
+	$fileHandle = file_put_contents ( $file, $content, FILE_APPEND);
+	
 }
 ?>
