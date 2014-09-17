@@ -355,7 +355,7 @@ margin-right: -100px;*/
 					$("#combineExcel").text("填写完毕，开始合并");
 
 					
-						//alert(data);
+						alert(data);
 						var dataStr = data.toString();
 						//alert(dataStr.indexOf("Error loading file:") );
 						if(dataStr.indexOf("Error loading file:") >= 0)
@@ -363,7 +363,7 @@ margin-right: -100px;*/
 							//alert(dataStr.substring(43, 67));
 							//alert(dataStr.length);
 							//alert(dataStr.length-1);
-							alert("文件损坏：\n" + dataStr.split(" ")[5].substr(10) + "\n该文件已经从服务器删除！");
+							alert("已跳过损坏文件：\n" + dataStr.split(" ")[5].substr(10) + "\n该文件已经从服务器删除！");
 						}
 						
 				

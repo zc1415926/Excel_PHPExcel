@@ -110,6 +110,23 @@ function combineExcels($numOfRowsToSkip, $numOfRowsToRead)
 			try 
 			{
 			    $objPHPExcel = $objReader->load($inputFileName);
+			    
+			    
+			    
+			    //一个xls文件读取完成，数据放入$sheetData中，使用var_dump ($sheetData);或print_r ($sheetData [2]);来查看
+			    $sheetData = $objPHPExcel->getActiveSheet ()->toArray ( null, true, true, true );
+			    	
+			    //$sheetData中有很多无用的数据，只选取几行需要的，存入$resultArray中
+			    for($i = 1 + $numOfRowsToSkip; $i <= $numOfRowsToRead + $numOfRowsToSkip; $i ++)
+			    {
+			    $resultArray [] = $sheetData [$i];
+			    }
+			    	
+			    //var_dump($resultArray);
+			    	
+
+			    //echo print_r(count($sheetData)."<br>");
+			    unlink($inputFileName);
 			}
 			catch (PHPExcel_Reader_Exception $e)
 			{
@@ -118,29 +135,16 @@ function combineExcels($numOfRowsToSkip, $numOfRowsToRead)
 			    unlink($inputFileName);
 			}
 			
-			
-			
-			
-			
-			
-			//一个xls文件读取完成，数据放入$sheetData中，使用var_dump ($sheetData);或print_r ($sheetData [2]);来查看
-			$sheetData = $objPHPExcel->getActiveSheet ()->toArray ( null, true, true, true );
-			
-			//$sheetData中有很多无用的数据，只选取几行需要的，存入$resultArray中
-			for($i = 1 + $numOfRowsToSkip; $i <= $numOfRowsToRead + $numOfRowsToSkip; $i ++)
-			{
-			$resultArray [] = $sheetData [$i];
-			}
-			
-			//var_dump($resultArray);
-			
 			// 读文件时“，”.和“..”都算一个文件，要注意把它们排除掉（用上一层的if语句）
 			$currNumOfFiles++;// +=(1 *6);
 			
 			$percentFinish = round ( $currNumOfFiles / $numOfFiles * 100 );
 			writeLog ( $percentFinish );
-			//echo print_r(count($sheetData)."<br>");
-			unlink($inputFileName);
+			
+			
+			
+			
+
 		}
 	}
 	
