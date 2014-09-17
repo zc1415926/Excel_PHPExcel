@@ -106,7 +106,21 @@ function combineExcels($numOfRowsToSkip, $numOfRowsToRead)
 			}*/
 			
 			$objReader->setReadDataOnly(true);
-			$objPHPExcel = $objReader->load($inputFileName);
+			
+			try 
+			{
+			    $objPHPExcel = $objReader->load($inputFileName);
+			}
+			catch (PHPExcel_Reader_Exception $e)
+			{
+			    die('Error loading file: '.$e->getMessage());
+			}
+			
+			
+			
+			
+			
+			
 			//一个xls文件读取完成，数据放入$sheetData中，使用var_dump ($sheetData);或print_r ($sheetData [2]);来查看
 			$sheetData = $objPHPExcel->getActiveSheet ()->toArray ( null, true, true, true );
 			
@@ -198,7 +212,7 @@ function combineExcels($numOfRowsToSkip, $numOfRowsToRead)
 	}
 	//print_r($resultPHPExcel->getActiveSheet ()->toArray ( null, true, true, true ));
 	$resultWriter = PHPExcel_IOFactory::createWriter ( $resultPHPExcel, 'Excel5' );
-	$resultWriter->save ( './result/result.xls' );
+	$resultWriter->save ( './result/result1.xls' );
 	
 	//echo "<a class='btn btn-large btn-danger' href='./result/result.xls'>合并完成，点击下载<a>";
 

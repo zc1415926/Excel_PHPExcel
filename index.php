@@ -199,7 +199,7 @@ margin-right: -100px;*/
 					<!-- <p class="interval"></p>
 					<p class="resultP"></p>-->
 					<a id="downloadBtn" class="btn btn-large btn-danger"
-						href="./result/result.xls" style="display: none" margin-bottom: 0.7em">合并完成，点击下载</a>
+						href="./result/result1.xls" style="display: none" margin-bottom: 0.7em">合并完成，点击下载</a>
 
 						
 						
@@ -356,11 +356,21 @@ margin-right: -100px;*/
 
 					
 						//alert(data);
+						var dataStr = data.toString();
+						//alert(dataStr.indexOf("Error loading file:") );
+						if(dataStr.indexOf("Error loading file:") >= 0)
+						{
+							//alert(dataStr.substring(43, 67));
+							//alert(dataStr.length);
+							//alert(dataStr.length-1);
+							alert("文件损坏：\n" + dataStr.split(" ")[5].substr(10));
+						}
+						
 				
 				},
-				"complete":function(data){
-					//alert(data);
-				}
+				//"complete":function(data){
+				//	alert(data);
+				//}
 			});
 			//启动定时器，获取处理进度
 			timer = setInterval("$.getProgress()",500);
